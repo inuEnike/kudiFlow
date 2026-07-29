@@ -1,24 +1,29 @@
 import app from "./app";
 import { connectDB, db } from "../config/db.config";
-import { env } from "../config/env";
+import { env } from "../config/env.config";
 import { logger } from "../utils/logger";
+import { migrate } from "../migrations/migrate";
+import { mailer } from "../config/nodemailer.config";
+import "./events/listeners";
 
-const PORT = env.PORT;
+import { startRedis } from "../config/redis.config";
+import { gracefulShutDown } from "../utils/gracefulShutDown";
+const PORT: number = env.PORT;
 
-const startServer = async () => {
+const startServer = async (): Promise<void> => {
   await connectDB();
+  await migrate();
+  await mailer();
+  const redis = startRedis();
   const server = app.listen(PORT);
-  logger.info(`\nServer don start successfuly on PORT ${PORT} 💥 `);
+
+  logger.info(`\nServer don start successfully on PORT ${PORT}  `);
 
   process.on("SIGINT", async () => {
-    logger.info("\n🛑 Shutting down...");
-    server.close(async () => {
-      await db.end();
-
-      logger.info("🛑 \nDatabase connection closed");
-
-      process.exit(0);
-    });
+    await gracefulShutDown(server, redis);
+  });
+  process.on("SIGTERM", async () => {
+    await gracefulShutDown(server, redis);
   });
 };
 
