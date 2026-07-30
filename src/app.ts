@@ -5,17 +5,17 @@ import { authRoute } from "./modules/auth/auth.route";
 import session from "express-session";
 import { env } from "../config/env.config";
 import { RedisStore } from "connect-redis";
-
-import { logger } from "../utils/logger";
-import { startRedis } from "../config/redis.config";
-
+import { RedisClient } from "redis";
+import cookieParser from 'cookie-parser'
 const app = express();
 const prefixURI = "/api/v1";
+
 app.use(express.json());
+app.use(cookieParser())
 app.use(
   session({
     store: new RedisStore({
-      client: startRedis(),
+      client: RedisClient,
       prefix: "sess:",
       ttl: 86400,
     }),

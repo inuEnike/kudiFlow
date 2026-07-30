@@ -1,0 +1,2 @@
+ALTER TABLE auth.user
+ALTER COLUMN role SET DEFAULT 3;

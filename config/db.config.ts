@@ -11,7 +11,7 @@ export const db = pg(env.DATABASE_URI, {
 export const connectDB = async () => {
   try {
     await db`SELECT 1`;
-    logger.info("\nconnected to postgres 🥰");
+    logger.info("connected to postgres 🥰");
   } catch (error) {
     ErrorLogger(error);
     process.exit(1);
