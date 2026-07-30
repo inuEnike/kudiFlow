@@ -3,14 +3,14 @@ import { env } from "./env.config";
 import { logger } from "../utils/logger";
 import { ErrorLogger } from "../utils/logger.error";
 
+export let transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: env.SMTP_USER,
+    pass: env.SMTP_PASS,
+  },
+});
 export const mailer = async () => {
-  let transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: env.SMTP_USER,
-      pass: env.SMTP_PASS,
-    },
-  });
   try {
     await transporter.verify();
     logger.info("SMTP server is ready.");

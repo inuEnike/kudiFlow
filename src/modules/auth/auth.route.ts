@@ -14,4 +14,6 @@ const service = new AuthService(repo, redis);
 const controller = new AuthController(service);
 authRoute
   .post("/signup", controller.signup)
-  .post("/verify", controller.verifyAndSaveData);
+  .post("/verify", controller.verifyAndSaveData)
+  .post("/login", controller.login)
+  .post("/verify_login", controller.verifyLogin);

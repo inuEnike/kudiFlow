@@ -1,8 +1,6 @@
-import { mailer } from "../../../config/nodemailer.config";
 import nodemailer from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import { otpEmailTemplate } from "./templates/otpEmail.template";
-import { welcomeEmail } from "./templates/welcomeEmail.template";
 import { signupSuccessEmail } from "./templates/successfulSignup.template";
 
 export class EmailService {

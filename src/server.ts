@@ -1,5 +1,5 @@
 import app from "./app";
-import { connectDB, db } from "../config/db.config";
+import { connectDB } from "../config/db.config";
 import { env } from "../config/env.config";
 import { logger } from "../utils/logger";
 import { migrate } from "../migrations/migrate";
@@ -17,7 +17,7 @@ const startServer = async (): Promise<void> => {
   const redis = startRedis();
   const server = app.listen(PORT);
 
-  logger.info(`\nServer don start successfully on PORT ${PORT}  `);
+  logger.info(`Server don start successfully on PORT ${PORT}  `);
 
   process.on("SIGINT", async () => {
     await gracefulShutDown(server, redis);

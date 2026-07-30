@@ -1,21 +1,18 @@
 import { createClient } from "redis";
-import { BadRequest } from "../utils/errors/BadRequest";
 import { logger } from "../utils/logger";
 
-export const startRedis = async () => {
-  try {
-    const client = createClient();
+export const client = createClient();
 
-    client.on("ready", () => {
-      logger.info("Redis connection is ready");
-    });
+client.on("ready", () => {
+  logger.info("Redis connection is ready");
+});
+client.on("error", (err) => {
+  logger.error(err, "Redis connection error");
+});
 
-    client.on("error", (err) => {
-      logger.error(err, "Redis connection error");
-    });
+export async function startRedis() {
+  if (!client.isOpen) {
     await client.connect();
-    return client;
-  } catch (error) {
-    throw new BadRequest("Redis Failed to Start");
   }
-};
+  return client;
+}

@@ -48,4 +48,12 @@ export class AuthRepository {
     `;
     return user;
   };
+  findUserById = async (id: number) => {
+    const [user] = await this.repository<User[]>`
+        SELECT * 
+        FROM auth.user
+        WHERE id = ${id}
+      `;
+    return user;
+  };
 }

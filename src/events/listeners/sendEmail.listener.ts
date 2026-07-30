@@ -1,13 +1,10 @@
-import { mailer } from "../../../config/nodemailer.config";
+import { transporter } from "../../../config/nodemailer.config";
 import { EmailService } from "../../services/email/email.service";
 import { EventBus } from "../event";
 import { EVENT_TYPES } from "../event.types";
 
-const emailTransporter = await mailer();
+const emailService = new EmailService(transporter);
 
-const emailService = new EmailService(emailTransporter);
-
-console.log("Registering email listener");
 EventBus.on(
   EVENT_TYPES.SEND_TOKEN_EMAIL,
   async ({ email, token }: { email: string; token: string }) => {
@@ -27,5 +24,14 @@ EventBus.on(
     last_name: string;
   }) => {
     await emailService.sendWelcomeEmail(email, first_name, last_name);
+  },
+);
+
+EventBus.on(
+  EVENT_TYPES.SEND_LOGIN_OTP,
+  async ({ email, otp }: { email: string; otp: string }) => {
+    console.log("from the listener", otp);
+
+    await emailService.sendToken(email, otp);
   },
 );
