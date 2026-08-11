@@ -16,4 +16,4 @@ export const connectDB = async () => {
     ErrorLogger(error);
     process.exit(1);
   }
-};
+}
